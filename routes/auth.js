@@ -1,11 +1,11 @@
 import express from 'express'
 
-const authRouter = express.Router()
+const router = express.Router()
 
-authRouter.get(`/register` , (req, res) => {
+router.get(`/register` , (req, res) => {
     res.send(`hello register`)
 })
 
 
 
-export default authRouter;
+export default router;
