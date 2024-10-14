@@ -18,6 +18,7 @@ readdirSync('./routes').map((file) => {
     }).catch((err) => console.error(`Failed to load ${file}:`, err));
 });
 
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
