@@ -4,7 +4,7 @@ import cors from 'cors';
 import { readdirSync } from 'fs';
 
 const app = express();
-const PORT = process.env.port || 3306;
+const PORT = process.env.port || 3000;
 
 // middleware
 app.use(morgan('dev'));
