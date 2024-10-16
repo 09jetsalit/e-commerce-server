@@ -1,6 +1,14 @@
+import { prisma } from '../config/prisma.js'
+
 export const categoryPost = async (req, res) => {
     try {
-        res.send(`Hello categoryPost In Controller`);
+        const { name } = req.body;
+        const category = await prisma.category.create({
+            data: {
+                name: name,
+            }
+        })
+        res.send(category);
         
     } catch (err) {
         console.log(err);
@@ -9,7 +17,8 @@ export const categoryPost = async (req, res) => {
 }
 export const categoryGet = async (req, res) => {
     try {
-        res.send(`Hello categoryGet In Controller`);
+        const category = await prisma.category.findMany();
+        res.send(category);
         
     } catch (err) {
         console.log(err);
@@ -18,7 +27,13 @@ export const categoryGet = async (req, res) => {
 }
 export const categoryDelete = async (req, res) => {
     try {
-        res.send(`Hello categoryDelete In Controller`);
+        const { id } = req.params;
+        const category = await prisma.category.delete({
+            where: {
+                id: Number(id)
+            }
+        })
+        res.send(`delete ${category} success`);
         
     } catch (err) {
         console.log(err);

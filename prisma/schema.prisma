@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -40,6 +40,8 @@ model Product {
   cartitemS   ProductOnCart[]
   createdAt   DateTime         @default(now())
   updateAt    DateTime         @updatedAt
+  category    Category         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId  Int
 }
 
 model Order {
@@ -94,8 +96,9 @@ model Image {
 }
 
 model Category {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }

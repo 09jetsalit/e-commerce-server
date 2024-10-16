@@ -1,7 +1,6 @@
 import { prisma } from '../config/prisma.js'
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs'
-import { token } from 'morgan';
 
 export const register = async (req, res) => {
     try {
@@ -69,11 +68,16 @@ export const login = async (req, res) => {
                 }
                 res.json({payload, token})
             })
+
     } catch (err) {
         console.log(err);
         res.status(500).json({message: "Server Error"})
     }
 }
+
+export const protectedToken = async (req, res) => {
+    res.send('This is a protected route');
+  }
 
 export const currentUser = async (req, res) => {
     try {
