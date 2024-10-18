@@ -34,7 +34,7 @@ model Product {
   description String
   price       Float
   sold        Int              @default(0)
-  quanntity   Int
+  quantity   Int
   orderItems  ProductOnOrder[]
   images      Image[]
   cartitemS   ProductOnCart[]
