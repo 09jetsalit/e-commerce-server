@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs'
 export const register = async (req, res) => {
     try {
         const { email, password} = req.body;
-        if(!email | !password){
+        if(!email || !password){
             return res.status(400).json({ message: `email or password is required`})
         }
         
@@ -20,7 +20,7 @@ export const register = async (req, res) => {
 
         const hashPassword = await bcrypt.hash(password,8)
         
-
+ 
         //step 4 insert in database
 
         await prisma.user.create({
@@ -50,7 +50,7 @@ export const login = async (req, res) => {
             return res.status(400).json({message: 'Email invalid'})
         }
         
-        const matchPassword =await bcrypt.compare(password,userEmail.password)
+        const matchPassword = await bcrypt.compare(password,userEmail.password)
         if (!matchPassword) {
             return res.status(400).json({message: 'Password Invalid'})
         }
