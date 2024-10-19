@@ -1,17 +1,27 @@
-import express from 'express'
-import { listUser } from '../controllers/user.js';
-import { authenticateToken } from '../middleware/authMiddleWare.js'
+import express from "express";
+import {
+  listUser,
+  changeStatus,
+  changeRole,
+  createCart,
+  listCart,
+  deleteCart,
+  address,
+  createOrder,
+  getOrder
+} from "../controllers/user.js";
+import { authenticateToken, adminCheck } from "../middleware/authMiddleWare.js";
 
 const router = express.Router();
 
-router.get('/users', authenticateToken, listUser)
-router.post('/change-status')
-router.post('/change-role')
-router.post('/user/cart')
-router.get('/user/cart')
-router.delete('/user/cart')
-router.post('/user/address')
-router.post('/user/order')
-router.get('/user/order')
+router.get("/users", authenticateToken, adminCheck, listUser);
+router.post("/change-status", authenticateToken, adminCheck, changeStatus);
+router.post("/change-role", authenticateToken, adminCheck, changeRole);
+router.post("/user/cart", authenticateToken, createCart);
+router.get("/user/cart", authenticateToken, listCart);
+router.delete("/user/cart", authenticateToken, deleteCart);
+router.post("/user/address", authenticateToken, address);
+router.post("/user/order", authenticateToken, createOrder);
+router.get("/user/order", authenticateToken, getOrder);
 
 export default router;

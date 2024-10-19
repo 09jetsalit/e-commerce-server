@@ -20,7 +20,7 @@ model User {
   name      String?
   picture   String?
   role      String   @default("user")
-  enbled    Boolean  @default(true)
+  enabled    Boolean  @default(true)
   address   String?
   orders    Order[]
   carts     Cart[]
