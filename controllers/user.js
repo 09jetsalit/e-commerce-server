@@ -63,7 +63,49 @@ export const changeRole = async (req, res) => {
 };
 export const createCart = async (req, res) => {
   try {
-    res.send("Hello createCart");
+    const { cart } = req.body;
+    // console.log(cart);
+    // console.log(req.user.id);
+    
+    const user = await prisma.user.findFirst({
+      where: {
+        id: req.user.id
+      }
+    })
+
+    // console.log(user);
+
+    // delete on product on cart
+    await prisma.productOnCart.deleteMany({
+      where: {
+        cart: {orderdById: user.id}
+      }
+    })
+    
+    // delete on cart
+    await prisma.cart.deleteMany({
+      where: {
+        orderdById: Number(user.id)
+      }
+    })
+
+    // prepare items
+    let products = cart.map((item) => ({
+      id: item.id,
+      count: item.count,
+      price: item.price
+    }))
+
+    // calculate sum
+    let cartTotal = products.reduce((sum, item) => sum + item.price * item.count, 0)
+
+    // create new cart
+    const newCart = await prisma.cart.create({
+      
+    })
+    console.log(cartTotal);
+    
+    res.send("Hello User Cart")
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server Error" });
