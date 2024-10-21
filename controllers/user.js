@@ -90,22 +90,30 @@ export const createCart = async (req, res) => {
     })
 
     // prepare items
-    let products = cart.map((item) => ({
-      id: item.id,
+    const productsData = cart.map((item) => ({
+      product: { connect: { id: item.id } },
       count: item.count,
       price: item.price
-    }))
-
+    }));
+    
+    // console.log("productsData", productsData);
+    
     // calculate sum
-    let cartTotal = products.reduce((sum, item) => sum + item.price * item.count, 0)
+    let cartTotal = productsData.reduce((sum, item) => sum + item.price * item.count, 0)
 
     // create new cart
     const newCart = await prisma.cart.create({
-      
+        data: {
+          products: {
+            create: productsData
+          },
+          cartTotal: cartTotal,
+          orderdById: user.id
+        }
     })
-    console.log(cartTotal);
+    // console.log(newCart);
     
-    res.send("Hello User Cart")
+    res.send("add product to cart success")
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server Error" });

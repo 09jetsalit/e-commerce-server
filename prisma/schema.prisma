@@ -37,7 +37,7 @@ model Product {
   quantity   Int
   orderItems  ProductOnOrder[]
   images      Image[]
-  cartitemS   ProductOnCart[]
+  cartitems   ProductOnCart[]
   createdAt   DateTime         @default(now())
   updateAt    DateTime         @updatedAt
   category    Category         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
