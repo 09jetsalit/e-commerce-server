@@ -120,8 +120,24 @@ export const createCart = async (req, res) => {
   }
 };
 export const listCart = async (req, res) => {
-  try {
-    res.send("Hello listCart");
+  try {   
+    const cart = await prisma.cart.findFirst({
+      where: {
+        orderdById: Number(req.user.id)
+      },
+      include: {
+        products: {
+          include: {
+            product: true
+          }
+        }
+      }
+    })
+    // console.log(cart);
+    res.json({
+      products: cart.products,
+      cartTotal: cart.cartTotal
+    })
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server Error" });
@@ -129,7 +145,30 @@ export const listCart = async (req, res) => {
 };
 export const deleteCart = async (req, res) => {
   try {
-    res.send("Hello deleteCart");
+    const cart = await prisma.cart.findFirst({
+      where: {
+        orderdById: Number(req.user.id)
+      }
+    })
+    if(!cart){
+      return res.status(400).json({ message: 'no cart'})
+    }
+
+    await prisma.productOnCart.deleteMany({
+      where: {
+        cartId: Number(cart.id)
+      }
+    })
+
+    const result = await prisma.cart.deleteMany({
+      where: {
+        orderdById: Number(req.user.id)
+      }
+    })
+    res.json({ message: 'cart remove success',
+      deletedCount: result.count
+    }
+    );
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server Error" });
