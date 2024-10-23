@@ -49,7 +49,7 @@ model Order {
   products    ProductOnOrder[]
   cartTotal   Float
   orderStatus String           @default("Not Process")
-  orderdBy    User             @relation(fields: [orderdById], references: [id], onDelete: Cascade)
+  orderdBy    User             @relation(fields: [orderdById], references: [id])
   orderdById  Int
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
