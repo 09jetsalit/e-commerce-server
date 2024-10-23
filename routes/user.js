@@ -7,7 +7,7 @@ import {
   listCart,
   deleteCart,
   address,
-  createOrder,
+  saveOrder,
   getOrder
 } from "../controllers/user.js";
 import { authenticateToken, adminCheck } from "../middleware/authMiddleWare.js";
@@ -21,7 +21,7 @@ router.post("/user/cart", authenticateToken, createCart);
 router.get("/user/cart", authenticateToken, listCart);
 router.delete("/user/cart", authenticateToken, deleteCart);
 router.post("/user/address", authenticateToken, address);
-router.post("/user/order", authenticateToken, createOrder);
+router.post("/user/order", authenticateToken, saveOrder);
 router.get("/user/order", authenticateToken, getOrder);
 
 export default router;

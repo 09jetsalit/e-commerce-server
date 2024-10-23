@@ -1,3 +1,4 @@
+import { connect } from "mongoose";
 import { prisma } from "../config/prisma.js";
 
 export const listUser = async (req, res) => {
@@ -176,15 +177,96 @@ export const deleteCart = async (req, res) => {
 };
 export const address = async (req, res) => {
   try {
-    res.send("Hello address");
+    const { address } = req.body;
+    const addressUser = await prisma.user.update({
+      where: {
+        address: address
+      }
+    })
+    res.send("success update address");
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server Error" });
   }
 };
-export const createOrder = async (req, res) => {
+export const saveOrder = async (req, res) => {
   try {
-    res.send("Hello createOrder");
+
+    // step 1 get cart
+    const userCart = await prisma.cart.findFirst({
+      where: {
+        orderdById: Number(req.user.id)
+      },
+      include: {
+        products: true
+      }
+    })
+
+    // check cart empty
+    if(!userCart || userCart.products.length === 0) {
+      return res.status(400).json({ message: 'cart is empty'})
+    }
+
+    // check quantity
+    for( const item of userCart.products) {
+      const product = await prisma.product.findUnique({
+        where: {
+          id: item.productId
+        },
+        select: {
+          quantity: true,
+          title: true,
+        }
+      })
+      if (!product || item.count > product.quantity){
+        return res.status(400).json({ 
+          ok: false,
+          message: 'product out of stock'})
+      }
+    }
+
+    // create new order
+    const order = await prisma.order.create({
+      data: {
+        create: userCart.products.map((item) => ({
+          productId: item.productId,
+          count: item.count,
+          price: item.price
+        }))
+      },
+      orderdById: {
+        connect: { id: req.user.id}
+      },
+      cartTotal: userCart.cartTotal
+    })
+
+    // update product
+    const update = await userCart.product.update((item) => ({
+      where: {
+        id: item.product.id
+      },
+      data: {
+        quantity: {
+          decrement: item.count,
+          sold: {
+            increment: item.count
+          }
+        }
+      }
+    }))
+
+    await Promise.all(
+      update.map((updated) => 
+        prisma.product.update(updated)
+      )
+    )
+
+    await prisma.cart.deleteMany({
+      where: {
+        orderdById: Number(req.user.id)
+      }
+    })
+    res.json({ ok: true, message: 'order'})
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server Error" });
