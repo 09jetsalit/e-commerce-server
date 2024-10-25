@@ -4,8 +4,8 @@ import { changeOrderStatus, getOrderAdmin } from "../controllers/admin.js";
 
 const router = express.Router();
 
-router.get(`/admin/orders`, authenticateToken, adminCheck, getOrderAdmin);
 router.put(`/admin/orders-status`, authenticateToken, adminCheck, changeOrderStatus);
+router.get(`/admin/orders`, authenticateToken, adminCheck, getOrderAdmin);
 
 
 export default router;

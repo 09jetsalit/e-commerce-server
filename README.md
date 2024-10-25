@@ -47,5 +47,5 @@
 
 | Endpoint            | Method | Description         | Body                                            |
 | ------------------- | ------ | ------------------- | ----------------------------------------------- |
-| `/api/user/order`   | PUT    | Update order status | `{ "orderId": 35, "orderStatus": "Completed" }` |
+| `/api/admin/orders-statusr`   | PUT    | Update order status | `{ "orderId": 35, "orderStatus": "Completed" }` |
 | `/api/admin/orders` | GET    | Get all orders      | None                                            |
