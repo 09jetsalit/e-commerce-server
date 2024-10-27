@@ -20,7 +20,7 @@ class UserService {
         const hashPassword = await bcrypt.hash(password, salt);
         
         // object new user
-        const newUser = new User(email, hashPassword);
+        const newUser = new User(email);
         // console.log(newUser);
         
 
@@ -31,7 +31,7 @@ class UserService {
         // console.log(createuser);
         
 
-        return "Register success";
+        return { user: newUser, message: "Register success" };
     }
 
     async login (email, password) {

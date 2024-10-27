@@ -8,9 +8,9 @@ export const register = async (req, res) => {
         const { email, password } = req.body;
         const message = await UserService.register(email, password);
         res.status(201).json({ message });
-    } catch (error) {
+    } catch (err) {
         console.log(err);
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ message: err.message });
     }
 }
 

@@ -1,13 +1,14 @@
 import express from 'express'
-import { categoryDelete, categoryGet, categoryPost } from '../controllers/category.js'
+import { categoryDelete, categoryGet, categoryPost } from '../controllers/categoryController.js'
+import { authenticateToken, adminCheck} from '../middleware/authMiddleWare.js'
 
 const router = express.Router()
 
 
 //@Endpoint http://localhost:3000/api/category
-router.post('/category' , categoryPost);
-router.get('/category' , categoryGet);
-router.delete('/category/:id' , categoryDelete);
+router.post('/category' , authenticateToken, adminCheck, categoryPost);
+router.get('/category' , authenticateToken, categoryGet);
+router.delete('/category/:id' , authenticateToken, adminCheck, categoryDelete);
 
 
 
