@@ -1,3 +1,45 @@
+# E-Commerce Server (Object-Oriented Programming)
+
+This e-commerce server is built using Object-Oriented Programming (OOP) principles in Node.js, with classes for user management, products, and orders. The project demonstrates OOP concepts such as encapsulation, inheritance, and modularity for better maintainability and scalability.
+
+## OOP Principles Demonstrated
+
+1. **Encapsulation**: Each class manages its own data and functions, creating modular components like `UserService` and `ProductService`.
+2. **Inheritance**: `AdminService` extends `UserService`, adding functionalities specific to admin users.
+3. **Polymorphism**: Methods with similar interfaces allow different classes to interact seamlessly.
+
+## Project Structure
+
+- **models/**: Defines data structures for `User`, `Product`, and `Order`.
+- **services/**: Handles core business logic with service classes.
+- **controllers/**: Routes HTTP requests to appropriate services.
+
+## Key Classes
+
+### UserService (Encapsulation Example)
+
+Handles user registration and login, encapsulating logic for password encryption and database access.
+
+```javascript
+// services/UserService.js
+import bcrypt from 'bcryptjs';
+import prisma from '../config/prisma.js';
+
+class UserService {
+    async register(email, password) {
+        const existingUser = await prisma.user.findFirst({ where: { email } });
+        if (existingUser) throw new Error("Email already exists");
+
+        const hashPassword = await bcrypt.hash(password, 8);
+        return await prisma.user.create({ data: { email, password: hashPassword } });
+    }
+}
+
+export default new UserService();
+
+
+
+
 # API Endpoints Summary
 
 ## Authentication
