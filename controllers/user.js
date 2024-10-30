@@ -1,4 +1,3 @@
-import { connect } from "mongoose";
 import { prisma } from "../config/prisma.js";
 
 export const listUser = async (req, res) => {
