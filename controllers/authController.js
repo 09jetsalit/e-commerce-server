@@ -1,49 +1,50 @@
-import { prisma } from '../config/prisma.js';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import UserService from '../services/AuthService.js';
+import UserService from "../services/AuthService.js";
 
 export const register = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const message = await UserService.register(email, password);
-        res.status(201).json( message );
-    } catch (err) {
-        console.log(err);
-        res.status(400).json({ message: err.message });
-    }
-}
+  try {
+    const { email, password } = req.body;
+    const messagee = await UserService.register(email, password);
+    res.status(201).json(messagee);
+  } catch (err) {
+    // console.log(err);
+    res.status(400).json({ message: err.message });
+  }
+};
 
 export const login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const { token, payload } = await UserService.login(email, password)
-        res.status(200).json({ message: "Login successful",token: token, user: payload });
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({message: "Server Error"})
+  try {
+    const { email, password } = req.body;
+    const { token, payload } = await UserService.login(email, password);
+    res
+      .status(200)
+      .json({ message: "Login successful", token: token, user: payload });
+  } catch (err) {
+    // console.log(err);
+    if (err === "Email or Password invalid") {
+      return res.status(400).json({ message: err.message });
     }
-}
+    res.status(500).json({ message: "Server Error" });
+  }
+};
 
 export const protectedToken = async (req, res) => {
-    res.send('This is a protected route');
-  }
+  res.send("This is a protected route");
+};
 
 export const currentUser = async (req, res) => {
-    try {
-        res.send(`Hello currentUser In Controller`)
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({message: "Server Error"})
-    }
-}
+  try {
+    res.send(`Hello currentUser In Controller`);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
 
 export const currentAdmin = async (req, res) => {
-    try {
-        res.send(`Hello currentAdmin In Controller`)
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({message: "Server Error"})
-    }
-}
-
+  try {
+    res.send(`Hello currentAdmin In Controller`);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+};

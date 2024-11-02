@@ -6,7 +6,9 @@ import { prisma } from '../config/prisma.js'
 class UserService {
     async register (email, password) {
         if(!email || !password){
-            return res.status(400).json({ message: `email or password is required`})
+            throw new Error("email and password is required");
+            
+            // return json({ message: `email or password is required`})
         }
         // ตรวจสอบว่าผู้ใช้มีอยู่แล้วหรือไม่
         const existingUser = await prisma.user.findFirst({
@@ -25,7 +27,7 @@ class UserService {
         
 
         // บันทึกผู้ใช้ใหม่
-        const createuser = await prisma.user.create({
+        await prisma.user.create({
             data: { email, password: hashPassword }
         });
         // console.log(createuser);
@@ -41,12 +43,13 @@ class UserService {
             }            
         })
         if (!userEmail) {
-            return res.status(400).json({message: 'Email invalid'})
+            throw new Error("Email or Password invalid");
+            
         }
         
-        const matchPassword = await bcrypt.compare(password,userEmail.password)
+        const matchPassword = bcrypt.compare(password, userEmail.password)
         if (!matchPassword) {
-            return res.status(400).json({message: 'Password Invalid'})
+            throw new Error("Email or Password invalid");
         }
         const payload = {
             id: userEmail.id,
