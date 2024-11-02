@@ -22,6 +22,7 @@ model User {
   role      String   @default("user")
   enabled    Boolean  @default(true)
   address   String?
+  refreshToken  String?
   orders    Order[]
   carts     Cart[]
   createdAt DateTime @default(now())

@@ -60,7 +60,17 @@ class UserService {
         const token = jwt.sign(payload,process.env.SECRET_KEY,{
             expiresIn:'3h'})
             // console.log(payload, token);
-            return { token, payload }
+            
+            const refreshToken = jwt.sign(payload,process.env.SECRET_KEY_REFRESH, { expiresIn: '7d'})
+            await prisma.user.update({
+                where: {
+                    id: userEmail.id
+                },
+                data: {
+                    refreshToken: refreshToken
+                }
+            })
+            return { token, refreshToken, payload }
         }
 }
 

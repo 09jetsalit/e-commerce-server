@@ -6,7 +6,7 @@ export const register = async (req, res) => {
     const messagee = await UserService.register(email, password);
     res.status(201).json(messagee);
   } catch (err) {
-    // console.log(err);
+    // console.log(err.message);
     res.status(400).json({ message: err.message });
   }
 };
@@ -14,10 +14,9 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const { token, payload } = await UserService.login(email, password);
-    res
-      .status(200)
-      .json({ message: "Login successful", token: token, user: payload });
+    const { token, refreshToken, payload } = await UserService.login(email, password);
+    res.status(200)
+      .json({ message: "Login successful", token: token, refreshtoken:refreshToken, user: payload });
   } catch (err) {
     // console.log(err);
     if (err === "Email or Password invalid") {
@@ -27,8 +26,9 @@ export const login = async (req, res) => {
   }
 };
 
-export const protectedToken = async (req, res) => {
-  res.send("This is a protected route");
+
+export const token = async (req, res) => {
+  
 };
 
 export const currentUser = async (req, res) => {
