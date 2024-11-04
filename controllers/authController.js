@@ -16,11 +16,12 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
     const { token, refreshToken, payload } = await UserService.login(email, password);
     res.status(200)
-      .json({ message: "Login successful", token: token, refreshtoken:refreshToken, user: payload });
+      .json({ message: "Login successful", token: token, refreshToken:refreshToken, user: payload });
   } catch (err) {
-    // console.log(err);
-    if (err === "Email or Password invalid") {
-      return res.status(400).json({ message: err.message });
+    const errMsg = err.message;
+    // console.log(errMsg);
+    if (err.message === "Email or Password invalid") {
+      return res.status(400).json({ message: errMsg });
     }
     res.status(500).json({ message: "Server Error" });
   }
@@ -28,7 +29,15 @@ export const login = async (req, res) => {
 
 
 export const token = async (req, res) => {
-  
+  const { refreshToken } = req.body;
+  try {
+    const result = await UserService.refreshToken(refreshToken)
+    // console.log("result:" , result);
+    res.json({result})
+    
+  } catch (err) {
+    res.status(403).json({ message: err.message})
+  }
 };
 
 export const currentUser = async (req, res) => {
