@@ -1,3 +1,4 @@
+import { prisma } from "../config/prisma.js";
 import UserService from "../services/AuthService.js";
 
 export const register = async (req, res) => {
@@ -42,7 +43,18 @@ export const token = async (req, res) => {
 
 export const currentUser = async (req, res) => {
   try {
-    res.send(`Hello currentUser In Controller`);
+    const user = await prisma.user.findFirst({
+      where: {
+        email: req.user.email
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+      }
+    })
+    res.json({user});
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Server Error" });
