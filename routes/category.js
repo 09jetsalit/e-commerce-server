@@ -7,7 +7,7 @@ const router = express.Router()
 
 //@Endpoint http://localhost:3000/api/category
 router.post('/category' , authenticateToken, adminCheck, categoryPost);
-router.get('/category' , authenticateToken, categoryGet);
+router.get('/category' , authenticateToken, adminCheck, categoryGet);
 router.delete('/category/:id' , authenticateToken, adminCheck, categoryDelete);
 
 
