@@ -225,3 +225,35 @@ export const productfilter = async (req, res) => {
         res.status(500).json({ message: "Server Error"});
     }
 }
+
+export const createImages = async (req, res) => {
+    try {
+        //code
+        // console.log(req.body)
+        const result = await cloudinary.uploader.upload(req.body.image, {
+            public_id: `jet-${Date.now()}`,
+            resource_type: 'auto',
+            folder: 'Ecommerce2024'
+        })
+        res.send(result)
+    } catch (err) {
+        //err
+        console.log(err)
+        res.status(500).json({ message: "Server Error" })
+    }
+}
+export const removeImage = async (req, res) => {
+    try {
+        //code
+        const { public_id } = req.body
+        // console.log(public_id)
+        cloudinary.uploader.destroy(public_id, (result) => {
+            res.send('Remove Image Success!!!')
+        })
+
+    } catch (err) {
+        //err
+        console.log(err)
+        res.status(500).json({ message: "Server Error" })
+    }
+}
